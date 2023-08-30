@@ -15,6 +15,7 @@ LEXERS = {
     ("xml", "xsl", "rss", "xslt", "xsd", "wsdl", "wsf"): pygment_lexers.XmlLexer,
     ("json",): pygment_lexers.JsonLexer,
     ("jsonld",): pygment_lexers.JsonLdLexer,
+    ("yaml", "yml"): pygment_lexers.YamlLexer,
 }
 
 
