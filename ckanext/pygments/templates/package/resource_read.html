@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block scripts %}
+    {{ super() }}
+    {% asset 'pygments/pygments-js' %}
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+
+    {% asset 'pygments/pygments-css' %}
+{% endblock %}

@@ -1,0 +1,14 @@
+pygments-js:
+  filter: rjsmin
+  output: ckanext-pygments/%(version)s-pygments.js
+  contents:
+    - js/pygment-line-highlight.js
+  extra:
+    preload:
+      - base/main
+
+pygments-css:
+  filter: cssrewrite
+  output: ckanext-pygments/%(version)s-pygments.css
+  contents:
+    - css/pygments.css
