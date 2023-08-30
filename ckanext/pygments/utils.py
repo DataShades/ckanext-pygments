@@ -18,7 +18,8 @@ LEXERS = {
     ("yaml", "yml"): pygment_lexers.YamlLexer,
     ("dtd",): pygment_lexers.DtdLexer,
     ("php", "inc"): pygment_lexers.PhpLexer,
-    ("ttl"): pygment_lexers.TurtleLexer,
+    ("ttl",): pygment_lexers.TurtleLexer,
+    ("js",): pygment_lexers.JavascriptLexer,
 }
 
 
