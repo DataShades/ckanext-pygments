@@ -13,6 +13,8 @@ LEXERS = {
     ("rst", "rest"): pygment_lexers.RstLexer,
     ("md", "markdown"): pygment_lexers.MarkdownLexer,
     ("xml", "xsl", "rss", "xslt", "xsd", "wsdl", "wsf"): pygment_lexers.XmlLexer,
+    ("json",): pygment_lexers.JsonLexer,
+    ("jsonld",): pygment_lexers.JsonLdLexer,
 }
 
 
