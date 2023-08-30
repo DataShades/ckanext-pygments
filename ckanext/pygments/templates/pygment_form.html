@@ -2,4 +2,4 @@
 
 {{ form.input('file_url', id='field-file_url', label=_('File URL'), placeholder=_('eg. http://example.com/test.sql  (if blank uses resource url)'), value=data.file_url, error=errors.file_url) }}
 
-{{ form.select('theme', id='field-theme', label=_('Preview theme'), options=h.get_preview_theme_options(), selected=data.theme, error=errors.theme) }}
+{{ form.select('theme', id='field-theme', label=_('Preview theme'), options=h.get_preview_theme_options(), selected=data.theme or "default", error=errors.theme) }}

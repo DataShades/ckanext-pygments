@@ -40,7 +40,7 @@ def pygment_preview(resource: dict[str, Any], theme: str) -> tuple[str, str]:
             else:
                 data = resp.text
 
-    css_styles = HtmlFormatter(style=theme).get_style_defs(".highlight")
+    css_styles = HtmlFormatter(style=theme or "default").get_style_defs(".highlight")
 
     return (
         highlight(
