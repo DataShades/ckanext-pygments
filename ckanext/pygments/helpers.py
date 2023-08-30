@@ -6,7 +6,15 @@ from typing import Any
 import requests
 from requests.exceptions import RequestException
 from pygments import highlight
-from pygments.lexers import SqlLexer, HtmlLexer, PythonLexer, TextLexer, RustLexer
+from pygments.lexers import (
+    SqlLexer,
+    HtmlLexer,
+    PythonLexer,
+    TextLexer,
+    RustLexer,
+    RstLexer,
+    MarkdownLexer
+)
 from pygments.formatters import HtmlFormatter
 
 import ckan.lib.uploader as uploader
@@ -15,7 +23,14 @@ from ckanext.pygments.utils import get_list_of_themes
 
 log = logging.getLogger(__name__)
 DEFAULT_LEXER = TextLexer
-LEXERS = {"sql": SqlLexer, "html": HtmlLexer, "py": PythonLexer, "rs": RustLexer}
+LEXERS = {
+    "sql": SqlLexer,
+    "html": HtmlLexer,
+    "py": PythonLexer,
+    "rs": RustLexer,
+    "rst": RstLexer,
+    "md": MarkdownLexer
+}
 
 
 def pygment_preview(resource: dict[str, Any], theme: str) -> tuple[str, str]:

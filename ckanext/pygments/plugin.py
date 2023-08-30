@@ -53,5 +53,5 @@ class PygmentsPlugin(p.SingletonPlugin):
     def declare_config_options(self, declaration: Declaration, key: Key):
         declaration.annotate("pygments preview settings")
         declaration.declare(
-            key.ckanextr.pygments.supported_formats, "sql py rs html xhtml"
+            key.ckanextr.pygments.supported_formats, "sql py rs html xhtml rst"
         )
