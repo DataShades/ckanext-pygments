@@ -27,7 +27,7 @@ class PygmentsPlugin(p.SingletonPlugin):
 
     def info(self) -> dict[str, Any]:
         return {
-            "name": "pygment_view",
+            "name": "pygments_view",
             "title": tk._("Pygment"),
             "icon": "fa-file-lines",
             "schema": get_preview_schema(),
