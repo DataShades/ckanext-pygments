@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from ckanext.pygments.utils import get_list_of_themes
-
 from ckan.logic.schema import validator_args
+
+from ckanext.pygments.utils import get_list_of_themes
 
 Schema = Dict[str, Any]
 

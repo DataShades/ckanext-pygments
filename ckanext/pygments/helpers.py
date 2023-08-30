@@ -3,42 +3,21 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import requests
-from requests.exceptions import RequestException
-from pygments import highlight
-from pygments.lexers import (
-    SqlLexer,
-    HtmlLexer,
-    PythonLexer,
-    TextLexer,
-    RustLexer,
-    RstLexer,
-    MarkdownLexer,
-    XmlLexer
-)
-from pygments.formatters import HtmlFormatter
-
 import ckan.lib.uploader as uploader
+import requests
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from requests.exceptions import RequestException
 
-from ckanext.pygments.utils import get_list_of_themes
+import ckanext.pygments.utils as pygment_utils
 
 log = logging.getLogger(__name__)
-DEFAULT_LEXER = TextLexer
-LEXERS = {
-    "sql": SqlLexer,
-    "html": HtmlLexer,
-    "py": PythonLexer,
-    "rs": RustLexer,
-    "rst": RstLexer,
-    "md": MarkdownLexer,
-    "xml": XmlLexer
-}
 
 
 def pygment_preview(resource: dict[str, Any], theme: str) -> tuple[str, str]:
     """Render a resource preview with pygments. Return a rendered data and css
     styles for it"""
-    lexer = LEXERS.get(resource.get("format", "").lower(), DEFAULT_LEXER)
+    lexer = pygment_utils.get_lexer_for_format(resource.get("format", "").lower())
 
     data = ""
 
@@ -75,4 +54,4 @@ def pygment_preview(resource: dict[str, Any], theme: str) -> tuple[str, str]:
 
 
 def get_preview_theme_options() -> list[dict[str, str]]:
-    return [{"value": opt, "text": opt} for opt in get_list_of_themes()]
+    return [{"value": opt, "text": opt} for opt in pygment_utils.get_list_of_themes()]

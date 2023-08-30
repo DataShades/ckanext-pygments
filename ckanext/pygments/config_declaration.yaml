@@ -1,0 +1,8 @@
+version: 1
+groups:
+  - annotation: ckanext-pygments
+    options:
+      - key: ckanext.pygments.supported_formats
+        type: list
+        description: Specify a list of supported formats
+        default: sql html xhtml htm xslt py pyw pyi jy sage sc rs rs.in rst rest md markdown xml xsl rss xslt xsd wsdl wsf
