@@ -12,12 +12,13 @@ LEXERS = {
     ("rs", "rs.in"): pygment_lexers.RustLexer,
     ("rst", "rest"): pygment_lexers.RstLexer,
     ("md", "markdown"): pygment_lexers.MarkdownLexer,
-    ("xml", "xsl", "rss", "xslt", "xsd", "wsdl", "wsf"): pygment_lexers.XmlLexer,
+    ("xml", "xsl", "rss", "xslt", "xsd", "wsdl", "wsf", "rdf"): pygment_lexers.XmlLexer,
     ("json",): pygment_lexers.JsonLexer,
     ("jsonld",): pygment_lexers.JsonLdLexer,
     ("yaml", "yml"): pygment_lexers.YamlLexer,
     ("dtd",): pygment_lexers.DtdLexer,
     ("php", "inc"): pygment_lexers.PhpLexer,
+    ("ttl"): pygment_lexers.TurtleLexer,
 }
 
 
