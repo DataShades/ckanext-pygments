@@ -24,7 +24,7 @@ class PygmentsPlugin(p.SingletonPlugin):
         tk.add_public_directory(config_, "public")
         tk.add_resource("assets", "pygments")
 
-        self.formats = tk.aslist(config_.get("ckan.pygments.supported_formats"))
+        self.formats = tk.aslist(config_["ckanext.pygments.supported_formats"])
 
     # IResourceView
 
@@ -53,5 +53,5 @@ class PygmentsPlugin(p.SingletonPlugin):
     def declare_config_options(self, declaration: Declaration, key: Key):
         declaration.annotate("pygments preview settings")
         declaration.declare(
-            key.ckanextr.pygments.supported_formats, "sql py rs html xhtml rst"
+            key.ckanext.pygments.supported_formats, "sql py rs html xhtml rst md xml"
         )

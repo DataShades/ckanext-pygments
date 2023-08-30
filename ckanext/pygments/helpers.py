@@ -13,7 +13,8 @@ from pygments.lexers import (
     TextLexer,
     RustLexer,
     RstLexer,
-    MarkdownLexer
+    MarkdownLexer,
+    XmlLexer
 )
 from pygments.formatters import HtmlFormatter
 
@@ -29,7 +30,8 @@ LEXERS = {
     "py": PythonLexer,
     "rs": RustLexer,
     "rst": RstLexer,
-    "md": MarkdownLexer
+    "md": MarkdownLexer,
+    "xml": XmlLexer
 }
 
 
