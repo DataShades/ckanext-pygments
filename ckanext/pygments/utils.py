@@ -16,6 +16,7 @@ LEXERS = {
     ("json",): pygment_lexers.JsonLexer,
     ("jsonld",): pygment_lexers.JsonLdLexer,
     ("yaml", "yml"): pygment_lexers.YamlLexer,
+    ("dtd",): pygment_lexers.DtdLexer,
 }
 
 
