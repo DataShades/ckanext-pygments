@@ -1,9 +1,6 @@
-{#} {% set res_url = resource_view.get('audio_url') or resource.get('url') %} {#}
-
 <!DOCTYPE html>
 
-{% set highlighted_sql, highlight_css = h.pygment_preview(resource) %}
-
+{% set highlighted_sql, highlight_css = h.pygment_preview(resource, resource_view.theme) %}
 
 <html>
     <head>
@@ -11,7 +8,6 @@
             {{ highlight_css | safe }}
         </style>
     </head>
-
 
     <body>
         <div class="highlight" data-module="pygment-line-highlight">

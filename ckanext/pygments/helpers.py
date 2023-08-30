@@ -8,16 +8,17 @@ from requests.exceptions import RequestException
 from pygments import highlight
 from pygments.lexers import SqlLexer, HtmlLexer, PythonLexer, TextLexer, RustLexer
 from pygments.formatters import HtmlFormatter
-from pygments.styles import STYLE_MAP
 
 import ckan.lib.uploader as uploader
+
+from ckanext.pygments.utils import get_list_of_themes
 
 log = logging.getLogger(__name__)
 DEFAULT_LEXER = TextLexer
 LEXERS = {"sql": SqlLexer, "html": HtmlLexer, "py": PythonLexer, "rs": RustLexer}
 
 
-def pygment_preview(resource: dict[str, Any]) -> tuple[str, str]:
+def pygment_preview(resource: dict[str, Any], theme: str) -> tuple[str, str]:
     """Render a resource preview with pygments. Return a rendered data and css
     styles for it"""
     lexer = LEXERS.get(resource.get("format", "").lower(), DEFAULT_LEXER)
@@ -39,7 +40,7 @@ def pygment_preview(resource: dict[str, Any]) -> tuple[str, str]:
             else:
                 data = resp.text
 
-    css_styles = HtmlFormatter(style="github-dark").get_style_defs(".highlight")
+    css_styles = HtmlFormatter(style=theme).get_style_defs(".highlight")
 
     return (
         highlight(
@@ -54,3 +55,7 @@ def pygment_preview(resource: dict[str, Any]) -> tuple[str, str]:
         ),
         css_styles,
     )
+
+
+def get_preview_theme_options() -> list[dict[str, str]]:
+    return [{"value": opt, "text": opt} for opt in get_list_of_themes()]

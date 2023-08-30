@@ -8,6 +8,8 @@ import ckan.plugins as p
 from ckan.types import Context, DataDict
 from ckan.config.declaration import Declaration, Key
 
+from ckanext.pygments.logic.schema import get_preview_schema
+
 
 @tk.blanket.helpers
 class PygmentsPlugin(p.SingletonPlugin):
@@ -31,13 +33,7 @@ class PygmentsPlugin(p.SingletonPlugin):
             "name": "pygment_view",
             "title": tk._("Pygment"),
             "icon": "fa-file-lines",
-            "schema": {
-                "file_url": [
-                    tk.get_validator("ignore_empty"),
-                    tk.get_validator("unicode_safe"),
-                    tk.get_validator("url_validator"),
-                ]
-            },
+            "schema": get_preview_schema(),
             "iframed": False,
             "always_available": True,
             "default_title": tk._("Pygment"),
@@ -56,4 +52,6 @@ class PygmentsPlugin(p.SingletonPlugin):
 
     def declare_config_options(self, declaration: Declaration, key: Key):
         declaration.annotate("pygments preview settings")
-        declaration.declare(key.ckanextr.pygments.supported_formats, "sql py rs html xhtml")
+        declaration.declare(
+            key.ckanextr.pygments.supported_formats, "sql py rs html xhtml"
+        )
