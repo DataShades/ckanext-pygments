@@ -8,13 +8,16 @@ from ckan.config.declaration import Declaration, Key
 from ckan.types import Context, DataDict
 
 import ckanext.pygments.config as pygment_config
+import ckanext.pygments.utils as pygment_utils
 from ckanext.pygments.logic.schema import get_preview_schema
 
 
 @tk.blanket.helpers
+@tk.blanket.validators
 class PygmentsPlugin(p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.IResourceView, inherit=True)
+    p.implements(p.IConfigDeclaration)
 
     # IConfigurer
 
@@ -46,3 +49,14 @@ class PygmentsPlugin(p.SingletonPlugin):
 
     def form_template(self, context: Context, data_dict: DataDict) -> str:
         return "pygment_form.html"
+
+    # IConfigDeclaration
+
+    def declare_config_options(self, declaration: Declaration, key: Key):
+        declaration.declare(
+            key.ckanext.pygments.supported_formats,
+            pygment_utils.get_formats_for_declaration(),
+        )
+        declaration.declare(
+            key.ckanext.pygments.max_size, pygment_config.bytes_to_render()
+        )

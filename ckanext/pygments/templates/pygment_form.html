@@ -1,5 +1,28 @@
 {% import 'macros/form.html' as form %}
 
-{{ form.input('file_url', id='field-file_url', label=_('File URL'), placeholder=_('eg. http://example.com/test.sql  (if blank uses resource url)'), value=data.file_url, error=errors.file_url) }}
+{{ form.input(
+    'file_url',
+    id='field-file_url',
+    label=_('File URL'),
+    placeholder=_('eg. http://example.com/test.sql  (if blank uses resource url)'),
+    value=data.file_url,
+    error=errors.file_url)
+}}
 
-{{ form.select('theme', id='field-theme', label=_('Preview theme'), options=h.get_preview_theme_options(), selected=data.theme or "default", error=errors.theme) }}
+{{ form.select(
+    'theme',
+    id='field-theme',
+    label=_('Preview theme'),
+    options=h.get_preview_theme_options(),
+    selected=data.theme or "default",
+    error=errors.theme)
+}}
+
+{% call form.input(
+    'size',
+    id='field-size',
+    label=_('Max size to render'),
+    value=data.size or h.get_default_max_size(),
+    error=errors.size) %}
+        {{ form.info(_('Specifies how many bytes from file we are going to render with ckanext-pygment. Set to `-1` if you want to disable a limit. This can cause the page to load very slowly.', classes=['info-help-tight'])) }}
+{% endcall %}

@@ -6,3 +6,8 @@ groups:
         type: list
         description: Specify a list of supported formats
         default: sql html xhtml htm xslt py pyw pyi jy sage sc rs rs.in rst rest md markdown xml xsl rss xslt xsd wsdl wsf json jsonld yaml yml dtd php
+
+      - key: ckanext.pygments.max_size
+        type: int
+        description: Specify how many bytes we are going to render from file. Default to 1MB
+        default: 1048576
