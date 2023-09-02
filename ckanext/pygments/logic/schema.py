@@ -7,7 +7,6 @@ from ckan.logic.schema import validator_args
 import ckanext.pygments.config as pygment_config
 from ckanext.pygments.utils import get_list_of_themes
 
-
 Schema = Dict[str, Any]
 
 

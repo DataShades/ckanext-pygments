@@ -2,7 +2,6 @@ import ckan.plugins.toolkit as tk
 
 import ckanext.pygments.utils as pygment_utils
 
-
 CONF_SUPPORTED_FORMATS = "ckanext.pygments.supported_formats"
 
 CONF_MAX_SIZE = "ckanext.pygments.max_size"

@@ -3,7 +3,6 @@ from __future__ import annotations
 import pygments.lexers as pygment_lexers
 from pygments.styles import STYLE_MAP
 
-
 DEFAULT_LEXER = pygment_lexers.TextLexer
 LEXERS = {
     ("sql",): pygment_lexers.SqlLexer,

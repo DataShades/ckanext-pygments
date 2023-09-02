@@ -9,8 +9,8 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from requests.exceptions import RequestException
 
-import ckanext.pygments.utils as pygment_utils
 import ckanext.pygments.config as pygment_config
+import ckanext.pygments.utils as pygment_utils
 
 log = logging.getLogger(__name__)
 
