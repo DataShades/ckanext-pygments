@@ -32,7 +32,7 @@ class PygmentsPlugin(p.SingletonPlugin):
         return {
             "name": "pygments_view",
             "title": tk._("Pygment"),
-            "icon": "fa-file-lines",
+            "icon": "palette",
             "schema": get_preview_schema(),
             "iframed": False,
             "always_available": True,
