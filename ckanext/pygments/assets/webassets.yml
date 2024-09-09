@@ -7,6 +7,12 @@ pygments-js:
     preload:
       - base/main
 
+pygments-js-htmx:
+  filter: rjsmin
+  output: ckanext-pygments/%(version)s-pygments-htmx.js
+  contents:
+    - js/vendor/htmx.min.js
+
 pygments-css:
   filter: cssrewrite
   output: ckanext-pygments/%(version)s-pygments.css

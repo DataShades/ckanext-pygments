@@ -11,3 +11,13 @@ groups:
         type: int
         description: Specify how many bytes we are going to render from file. Default to 1MB
         default: 1048576
+
+      - key: ckanext.pygments.include_htmx_asset
+        description: Include HTMX asset
+        default: true
+        type: bool
+        validators: ignore_empty boolean_validator
+
+      - key: ckanext.pygments.default_theme
+        description: Default theme for preview
+        default: default

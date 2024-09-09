@@ -23,6 +23,12 @@ Supported config options:
     Specify how many bytes we are going to render from file. Default to 1MB.
     Set to `-1` if you want to disable a limit. This can cause the page to load very slowly.
 
+3. `ckanext.pygments.include_htmx_asset` (optional, default: `True`).
+    Include HTMX asset in the page. Set to `False` if you want to include it yourself or another extension already includes it.
+
+4. `ckanext.pygments.default_theme` (optional, default: `default`).
+    Specify the default theme to use.
+    
 ## Tests
 
 To run the tests, do:

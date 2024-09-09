@@ -2,7 +2,12 @@
 
 {% block scripts %}
     {{ super() }}
+
     {% asset 'pygments/pygments-js' %}
+
+    {% if h.pygments_include_htmx_asset() %}
+        {% asset "pygments/pygments-js-htmx" %}
+    {% endif %}
 {% endblock %}
 
 {% block styles %}
