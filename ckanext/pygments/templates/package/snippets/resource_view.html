@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{% block resource_view %}
+    <a class="btn btn-default btn-pygment-refresh">
+        <i class="fa fa-refresh"></i>
+        {{ _("Refresh") }}
+    </a>
+
+    {{ super() }}
+{% endblock %}

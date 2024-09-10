@@ -1,4 +1,24 @@
+.resource-view {
+    position: relative;
+}
+
+.btn-pygment-refresh {
+    position: absolute;
+    top: -10px;
+    z-index: 1;
+}
+
 .resource-view .pygments-highlight {
     max-height: 700px;
     overflow: auto;
+}
+
+#pygments-spinner {
+    gap: 0.25rem;
+    display: none;
+    align-items: center;
+}
+
+.htmx-request#pygments-spinner {
+    display: flex;
 }
