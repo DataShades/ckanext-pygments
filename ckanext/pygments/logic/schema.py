@@ -23,7 +23,7 @@ def get_preview_schema(
     return {
         "file_url": [ignore_empty, unicode_safe, url_validator],
         "theme": [
-            default("default"),
+            default(pygment_config.get_default_theme()),
             unicode_safe,
             one_of(get_list_of_themes()),
         ],
