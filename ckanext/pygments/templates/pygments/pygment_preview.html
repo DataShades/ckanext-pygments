@@ -7,3 +7,11 @@
         {{ _("Preparing your preview...") }}
     </span>
 </div>
+
+{% asset 'pygments/pygments-js' %}
+
+{% if h.pygments_include_htmx_asset() %}
+    {% asset "pygments/pygments-js-htmx" %}
+{% endif %}
+
+{% asset 'pygments/pygments-css' %}
