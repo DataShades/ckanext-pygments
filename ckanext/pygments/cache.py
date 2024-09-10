@@ -38,11 +38,15 @@ class RedisCache:
 
     def invalidate(self, resource_id: str):
         """Invalidate cache by key"""
+        log.debug("Pygments: invalidating cache for resource: %s", resource_id)
         self.client.delete(self.make_key(resource_id))
 
     @classmethod
     def drop_cache(cls) -> None:
+        """Drop all cache keys"""
         conn = connect_to_redis()
+
+        log.debug("Pygments: dropping all cache keys")
 
         for key in conn.scan_iter(f"{const.REDIS_PREFIX}*"):
             conn.delete(key)
