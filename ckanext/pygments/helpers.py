@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import math
+from typing import Any
 
+import ckanext.pygments.cache as pygments_cache
 import ckanext.pygments.config as pygment_config
 import ckanext.pygments.utils as pygment_utils
-import ckanext.pygments.cache as pygments_cache
 
 
 def pygments_get_preview_theme_options() -> list[dict[str, str]]:
@@ -49,3 +50,17 @@ def pygments_printable_file_size(size_bytes: int) -> str:
     s = round(float(size_bytes) / p, 1)
 
     return f"{s} {size_name[i]}"
+
+
+def pygments_theme_options(field: dict[str, Any]) -> list[dict[str, str]]:
+    return [{"value": opt, "label": opt} for opt in pygment_utils.get_list_of_themes()]
+
+
+def pygments_supported_formats_options(field: dict[str, Any]) -> list[dict[str, str]]:
+    result = []
+
+    for formats, _ in pygment_utils.LEXERS.items():
+        for res_format in formats:
+            result.append({"value": res_format, "label": res_format})
+
+    return result

@@ -40,8 +40,8 @@ Supported config options:
   default: false
   type: bool
 
-- key: ckanext.pygments.cache.resouce_max_size
-  description: Specify what is the maximum size of the resource that we are going to cache
+- key: ckanext.pygments.cache.preview_max_size
+  description: Specify what is the maximum size of a preview we are going to cache
   default: 20971520 # 20MB
   type: int
 

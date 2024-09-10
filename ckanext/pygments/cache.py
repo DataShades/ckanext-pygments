@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import logging
 
-import ckan.plugins.toolkit as tk
 from ckan.lib.redis import connect_to_redis
 
-from ckanext.pygments import const, config
+from ckanext.pygments import config, const
 
 log = logging.getLogger(__name__)
 

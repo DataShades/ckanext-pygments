@@ -7,11 +7,11 @@ import ckan.lib.uploader as uploader
 import ckan.plugins.toolkit as tk
 import pygments.lexers as pygment_lexers
 import requests
-from requests.exceptions import RequestException
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.styles import STYLE_MAP
 from pygments.token import Text
+from requests.exceptions import RequestException
 
 from ckanext.pygments import config as pygment_config
 

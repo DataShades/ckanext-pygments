@@ -13,7 +13,7 @@ CONF_DEFAULT_THEME = "ckanext.pygments.default_theme"
 DEFAULT_THEME = "default"
 
 CONF_ENABLE_CACHE = "ckanext.pygments.cache.enable"
-CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.resouce_max_size"
+CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.preview_max_size"
 CONF_CACHE_TTL = "ckanext.pygments.cache.ttl"
 
 
