@@ -5,7 +5,7 @@ import logging
 import ckan.plugins.toolkit as tk
 from ckan.lib.redis import connect_to_redis
 
-from ckanext.pygments import const
+from ckanext.pygments import const, config
 
 log = logging.getLogger(__name__)
 
@@ -29,12 +29,12 @@ class RedisCache:
 
     def set_data(self, resource_id: str, data: str):
         """Serialize data and save to redis"""
-        cache_ttl = 7200  # TODO: make it configurable
+        cache_ttl = config.get_cache_ttl()
 
         try:
             self.client.setex(self.make_key(resource_id), cache_ttl, data)
         except Exception as e:
-            log.exception("Failed to save data to Redis: %s", e)
+            log.exception("Pygments: failed to save data to Redis: %s", e)
 
     def invalidate(self, resource_id: str):
         """Invalidate cache by key"""

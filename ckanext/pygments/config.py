@@ -14,6 +14,7 @@ DEFAULT_THEME = "default"
 
 CONF_ENABLE_CACHE = "ckanext.pygments.cache.enable"
 CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.resouce_max_size"
+CONF_CACHE_TTL = "ckanext.pygments.cache.ttl"
 
 
 def is_format_supported(fmt: str) -> bool:
@@ -52,3 +53,8 @@ def is_cache_enabled() -> bool:
 def get_resource_cache_max_size() -> int:
     """Get the max size of the cache for the resource"""
     return tk.config[CONF_RES_CACHE_MAX_SIZE]
+
+
+def get_cache_ttl() -> int:
+    """Get the cache TTL"""
+    return tk.config[CONF_CACHE_TTL]

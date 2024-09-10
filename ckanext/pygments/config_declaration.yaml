@@ -30,3 +30,8 @@ groups:
         description: Specify what is the maximum size of the resource that we are going to cache
         default: 20971520 # 20MB
         type: int
+
+      - key: ckanext.pygments.cache.ttl
+        description: Specify the time to live of the cache
+        default: 7200 # 2 hours
+        type: int
