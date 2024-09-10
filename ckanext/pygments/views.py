@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import logging
 
+from flask import Blueprint
+from flask.views import MethodView
+
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
-from flask import Blueprint
 
 import ckanext.pygments.cache as pygments_cache
 import ckanext.pygments.config as pygment_config
@@ -62,11 +64,25 @@ if p.plugin_loaded("admin_panel"):
     pygments_admin = Blueprint("pygments_admin", __name__)
     pygments_admin.before_request(ap_before_request)
 
+    class ConfigClearCacheView(MethodView):
+        def post(self):
+            pygments_cache.RedisCache.drop_cache()
+
+            tk.h.flash_success(tk._("Cache has been cleared"))
+
+            return tk.h.redirect_to("pygments_admin.config")
+
+    pygments_admin.add_url_rule(
+        "/admin-panel/pygments/clear-cache",
+        view_func=ConfigClearCacheView.as_view("clear_cache"),
+    )
+
     pygments_admin.add_url_rule(
         "/admin-panel/pygments/config",
         view_func=ApConfigurationPageView.as_view(
             "config",
             "pygments_config",
+            render_template="pygments/config.html",
             page_title=tk._("Pygments config"),
         ),
     )
