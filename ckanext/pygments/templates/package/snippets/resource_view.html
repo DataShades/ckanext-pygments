@@ -1,10 +1,19 @@
 {% ckan_extends %}
 
 {% block resource_view %}
-    <a class="btn btn-default btn-pygment-refresh">
-        <i class="fa fa-refresh"></i>
-        {{ _("Refresh") }}
-    </a>
+    <div class="pygments-info">
+        {% if resource.url_type != "upload" %}
+            <a class="btn btn-default btn-pygment-refresh">
+                <i class="fa fa-refresh"></i>
+                {{ _("Refresh") }}
+            </a>
+        {% endif %}
+
+        {% if g.userobj.sysadmin and h.pygments_is_cache_enabled() %}
+            <span>{{ _("Total") }}: {{ h.pygments_printable_file_size(h.pygments_get_cache_size()) }}</span>
+            <span>{{ _("Current") }}: {{ h.pygments_printable_file_size(h.pygments_get_resource_cache_size(resource.id)) }}</span>
+        {% endif %}
+    </div>
 
     {{ super() }}
 {% endblock %}

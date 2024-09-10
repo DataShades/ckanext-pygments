@@ -1,4 +1,5 @@
 <div
+    data-module="pygment-global"
     hx-target="this"
     hx-trigger="load, click from:.btn-pygment-refresh"
     hx-get="{{ h.url_for('pygments.highlight', resource_id=resource.id, theme=resource_view.theme, chunk_size=resource_view.size) }}"

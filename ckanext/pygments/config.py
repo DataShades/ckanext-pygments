@@ -12,6 +12,9 @@ CONF_ENABLE_HTMX = "ckanext.pygments.include_htmx_asset"
 CONF_DEFAULT_THEME = "ckanext.pygments.default_theme"
 DEFAULT_THEME = "default"
 
+CONF_ENABLE_CACHE = "ckanext.pygments.cache.enable"
+CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.resouce_max_size"
+
 
 def is_format_supported(fmt: str) -> bool:
     """Check if the format is supported by the pygments library"""
@@ -39,3 +42,13 @@ def include_htmx_asset() -> bool:
 def get_default_theme() -> str:
     """Get the default theme for pygments"""
     return tk.config.get(CONF_DEFAULT_THEME, DEFAULT_THEME)
+
+
+def is_cache_enabled() -> bool:
+    """Check if the cache is enabled"""
+    return tk.config[CONF_ENABLE_CACHE]
+
+
+def get_resource_cache_max_size() -> int:
+    """Get the max size of the cache for the resource"""
+    return tk.config[CONF_RES_CACHE_MAX_SIZE]

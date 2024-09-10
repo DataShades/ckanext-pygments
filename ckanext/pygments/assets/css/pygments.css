@@ -2,15 +2,23 @@
     position: relative;
 }
 
-.btn-pygment-refresh {
+.resource-view .pygments-info {
     position: absolute;
     top: -10px;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 35px;
 }
 
 .resource-view .pygments-highlight {
     max-height: 700px;
     overflow: auto;
+}
+
+.pygments-highlight h2 {
+    display: none;
 }
 
 #pygments-spinner {
@@ -21,4 +29,8 @@
 
 .htmx-request#pygments-spinner {
     display: flex;
+}
+
+body.pygments-request-pending .pygments_highlight {
+    opacity: 0.7;
 }

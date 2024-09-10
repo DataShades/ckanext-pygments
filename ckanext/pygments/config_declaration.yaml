@@ -16,8 +16,17 @@ groups:
         description: Include HTMX asset
         default: true
         type: bool
-        validators: ignore_empty boolean_validator
 
       - key: ckanext.pygments.default_theme
         description: Default theme for preview
         default: default
+
+      - key: ckanext.pygments.cache.enable
+        description: Enable cache
+        default: false
+        type: bool
+
+      - key: ckanext.pygments.cache.resouce_max_size
+        description: Specify what is the maximum size of the resource that we are going to cache
+        default: 20971520 # 20MB
+        type: int
