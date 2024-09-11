@@ -12,6 +12,7 @@ fields:
     form_snippet: tom_select.html
     form_attrs:
       multiple: "true"
+      required: 1
       data-module-load-url: "/api/action/pygments_formats_list"
 
   - field_name: ckanext.pygments.max_size
@@ -26,9 +27,9 @@ fields:
     required: true
     choices:
       - value: true
-        label: True
+        label: Yes
       - value: false
-        label: False
+        label: No
 
   - field_name: ckanext.pygments.default_theme
     label: Default Theme
@@ -37,6 +38,17 @@ fields:
     required: true
     choices_helper: pygments_theme_options
 
+  - field_name: ckanext.pygments.guess_lexer
+    label: Guess Lexer
+    help_text: Try to guess the Lexer for a format
+    preset: select
+    required: true
+    choices:
+      - value: true
+        label: Yes
+      - value: false
+        label: No
+
   - field_name: ckanext.pygments.cache.enable
     label: Enable Cache
     help_text: Enable cache
@@ -44,9 +56,9 @@ fields:
     required: true
     choices:
       - value: true
-        label: True
+        label: Yes
       - value: false
-        label: False
+        label: No
 
   - field_name: ckanext.pygments.cache.preview_max_size
     label: Preview Max Size
@@ -57,59 +69,3 @@ fields:
     label: Cache TTL
     help_text: Specify the time to live of the cache. Default is 2 hours
     input_type: number
-
-  # - field_name: ckanext.charts.cache_strategy
-  #   label: Cache Strategy
-  #   help_text: Choose the cache strategy for the charts extension.
-  #   preset: select
-  #   required: true
-  #   choices:
-  #     - value: file_orc
-  #       label: File (ORC)
-  #     - value: file_csv
-  #       label: File (CSV)
-  #     - value: redis
-  #       label: Redis
-
-  # - field_name: ckanext.charts.redis_cache_ttl
-  #   label: Redis Cache TTL
-  #   help_text: Time to live for the Redis cache in seconds. Set 0 to disable cache.
-  #   input_type: number
-
-  # - field_name: ckanext.charts.file_cache_ttl
-  #   label: File Cache TTL
-  #   help_text: Time to live for the File cache in seconds. Set 0 to disable cache.
-  #   input_type: number
-
-  # - field_name: ckanext.charts.enable_cache
-  #   label: Enable Cache
-  #   help_text: Enable or disable the cache.
-  #   preset: select
-  #   required: true
-  #   choices:
-  #     - value: true
-  #       label: True
-  #     - value: false
-  #       label: False
-
-  # - field_name: ckanext.charts.reinit_ckan_js_modules
-  #   label: Reinit CKAN JS Modules
-  #   help_text: Reinitialize CKAN JS modules.
-  #   preset: select
-  #   required: true
-  #   choices:
-  #     - value: true
-  #       label: True
-  #     - value: false
-  #       label: False
-
-  # - field_name: ckanext.charts.allow_anon_building_charts
-  #   label: Allow Anonymous Building Charts
-  #   help_text: Allow anonymous users to build charts.
-  #   preset: select
-  #   required: true
-  #   choices:
-  #     - value: true
-  #       label: True
-  #     - value: false
-  #       label: False

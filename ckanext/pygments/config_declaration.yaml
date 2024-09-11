@@ -24,6 +24,12 @@ groups:
         default: default
         editable: true
 
+      - key: ckanext.pygments.guess_lexer
+        description: Try to guess the Lexer for a format
+        default: true
+        type: bool
+        editable: true
+
       - key: ckanext.pygments.cache.enable
         description: Enable cache
         default: false

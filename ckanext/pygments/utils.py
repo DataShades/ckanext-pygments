@@ -89,6 +89,10 @@ def get_lexer_for_format(fmt: str):
         if fmt in formats:
             return lexer
 
+    if pygment_config.guess_lexer():
+        if lexer := pygment_lexers.find_lexer_class_for_filename(f"file.{fmt}"):
+            return lexer
+
     return DEFAULT_LEXER
 
 

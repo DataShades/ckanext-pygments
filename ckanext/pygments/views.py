@@ -33,9 +33,11 @@ def highlight(resource_id: str) -> str:
         try:
             preview = pygments_utils.pygment_preview(
                 resource_id,
-                tk.request.args.get("theme", pygment_config.DEFAULT_THEME, type=str),
                 tk.request.args.get(
-                    "chunk_size", pygment_config.DEFAULT_MAX_SIZE, type=int
+                    "theme", pygment_config.get_default_theme(), type=str
+                ),
+                tk.request.args.get(
+                    "chunk_size", pygment_config.get_resource_cache_max_size(), type=int
                 ),
             )
         except Exception as e:

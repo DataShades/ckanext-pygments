@@ -5,13 +5,9 @@ import ckanext.pygments.utils as pygment_utils
 CONF_SUPPORTED_FORMATS = "ckanext.pygments.supported_formats"
 
 CONF_MAX_SIZE = "ckanext.pygments.max_size"
-DEFAULT_MAX_SIZE = 1048576  # 1MB
-
 CONF_ENABLE_HTMX = "ckanext.pygments.include_htmx_asset"
-
 CONF_DEFAULT_THEME = "ckanext.pygments.default_theme"
-DEFAULT_THEME = "default"
-
+CONF_GUESS_LEXER = "ckanext.pygments.guess_lexer"
 CONF_ENABLE_CACHE = "ckanext.pygments.cache.enable"
 CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.preview_max_size"
 CONF_CACHE_TTL = "ckanext.pygments.cache.ttl"
@@ -23,8 +19,7 @@ def is_format_supported(fmt: str) -> bool:
 
 def bytes_to_render() -> int:
     """Check how many bytes from file we are going to render as preview"""
-
-    return tk.asint(tk.config.get(CONF_MAX_SIZE, DEFAULT_MAX_SIZE))
+    return tk.config[CONF_MAX_SIZE]
 
 
 def include_htmx_asset() -> bool:
@@ -34,7 +29,12 @@ def include_htmx_asset() -> bool:
 
 def get_default_theme() -> str:
     """Get the default theme for pygments"""
-    return tk.config.get(CONF_DEFAULT_THEME, DEFAULT_THEME)
+    return tk.config[CONF_DEFAULT_THEME]
+
+
+def guess_lexer() -> bool:
+    """Check if we should guess the lexer"""
+    return tk.config[CONF_GUESS_LEXER]
 
 
 def is_cache_enabled() -> bool:
