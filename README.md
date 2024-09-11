@@ -14,7 +14,7 @@ It's still debatable if we need cache at all. Big resource processed with pygmen
 ### Admin configuration page
 If you're using the [ckanext-admin-panel](https://github.com/mutantsan/ckanext-admin-panel) extension, you can configure the pygments settings from the admin panel.
 
-![Configuration page](docs/config.png)
+![Configuration page](doc/config.png)
 
 Otherwise, you can configure it in the `ckan.ini` file.
 
