@@ -18,15 +18,7 @@ CONF_CACHE_TTL = "ckanext.pygments.cache.ttl"
 
 
 def is_format_supported(fmt: str) -> bool:
-    """Check if the format is supported by the pygments library"""
-    if fmt not in tk.config[CONF_SUPPORTED_FORMATS]:
-        return False
-
-    for formats in pygment_utils.LEXERS:
-        if fmt in formats:
-            return True
-
-    return False
+    return fmt in tk.config[CONF_SUPPORTED_FORMATS].split(",")
 
 
 def bytes_to_render() -> int:

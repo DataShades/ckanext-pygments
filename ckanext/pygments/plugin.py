@@ -16,6 +16,7 @@ from ckanext.pygments.logic.schema import get_preview_schema
 @tk.blanket.validators
 @tk.blanket.config_declarations
 @tk.blanket.blueprints
+@tk.blanket.actions
 class PygmentsPlugin(p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.IResourceView, inherit=True)

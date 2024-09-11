@@ -8,12 +8,11 @@ fields:
     help_text: Specify a list of supported formats
     required: true
     choices_helper: pygments_supported_formats_options
-    form_select_attrs:
-      data-module: autocomplete
-      data-module-tags: ""
-      # data-module-createtags: "true"
-      multiple: 1
-      class: ""
+    validators: not_missing unicode_safe
+    form_snippet: tom_select.html
+    form_attrs:
+      multiple: "true"
+      data-module-load-url: "/api/action/pygments_formats_list"
 
   - field_name: ckanext.pygments.max_size
     label: Max Size
