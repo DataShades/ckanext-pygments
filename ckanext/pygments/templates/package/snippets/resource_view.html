@@ -9,7 +9,7 @@
             </a>
         {% endif %}
 
-        {% if g.userobj.sysadmin and h.pygments_is_cache_enabled() %}
+        {% if g.userobj.sysadmin and h.pygments_is_cache_enabled() and resource_view.view_type == "pygments_view" %}
             <span><b>{{ _("Memory usage") }}:</b></span>
             <span>{{ _("Total") }}: {{ h.pygments_printable_file_size(h.pygments_get_cache_size()) }}</span>
             <span>{{ _("Current") }}: {{ h.pygments_printable_file_size(h.pygments_get_resource_cache_size(resource.id)) }}</span>
