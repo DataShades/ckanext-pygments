@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import ckan.lib.uploader as uploader
-import ckan.plugins.toolkit as tk
 import pygments.lexers as pygment_lexers
 import requests
 from pygments import highlight
@@ -12,6 +10,10 @@ from pygments.formatters.html import HtmlFormatter
 from pygments.styles import STYLE_MAP
 from pygments.token import Text
 from requests.exceptions import RequestException
+
+import ckan.model as model
+import ckan.lib.uploader as uploader
+import ckan.plugins.toolkit as tk
 
 from ckanext.pygments import config as pygment_config
 
@@ -34,7 +36,6 @@ LEXERS = {
     ("ttl",): pygment_lexers.TurtleLexer,
     ("js",): pygment_lexers.JavascriptLexer,
 }
-
 
 class CustomHtmlFormatter(HtmlFormatter):
     """CSS post-processing for Pygments HTML formatter due to poor isolation"""
@@ -96,23 +97,34 @@ def get_lexer_for_format(fmt: str):
     return DEFAULT_LEXER
 
 
-def pygment_preview(resource_id: str, theme: str, chunk_size: int) -> str:
+def pygment_preview(
+    resource_id: str,
+    theme: str,
+    chunk_size: int,
+    file_url: str | None,
+) -> str:
     """Render a preview of a resource using Pygments"""
 
-    resource = tk.get_action("resource_show")({}, {"id": resource_id})
+    resource = model.Resource.get(resource_id)
+
+    if not resource:
+        return ""
 
     maxsize = chunk_size or pygment_config.bytes_to_render()
 
-    data = (
-        get_local_resource_data(resource, maxsize)
-        if resource.get("url_type") == "upload"
-        else get_remote_resource_data(resource, maxsize)
-    )
+    if file_url or resource.url_type != "upload":
+        data = get_remote_resource_data(resource, maxsize, file_url)
+    else:
+        data = get_local_resource_data(resource, maxsize)
+
+    lexer = get_lexer_for_resource(resource, file_url, data)
+
+    log.debug("Pygments: using lexer %s for resource %s", lexer, resource_id)
 
     try:
         preview = highlight(
             data,
-            lexer=get_lexer_for_format(resource.get("format", "").lower())(),
+            lexer=lexer,
             formatter=CustomHtmlFormatter(
                 full=True,
                 style=theme,
@@ -129,11 +141,11 @@ def pygment_preview(resource_id: str, theme: str, chunk_size: int) -> str:
     return preview
 
 
-def get_local_resource_data(resource: dict[str, Any], maxsize: int) -> str:
+def get_local_resource_data(resource: model.Resource, maxsize: int) -> str:
     """Return a local resource data"""
 
-    upload = uploader.get_resource_uploader(resource)
-    filepath = upload.get_path(resource["id"])
+    upload = uploader.get_resource_uploader(resource.as_dict(True))
+    filepath = upload.get_path(resource.id)
 
     try:
         with open(filepath) as f:
@@ -147,18 +159,37 @@ def get_local_resource_data(resource: dict[str, Any], maxsize: int) -> str:
     return data
 
 
-def get_remote_resource_data(resource: dict[str, Any], maxsize: int) -> str:
+def get_remote_resource_data(
+    resource: model.Resource, maxsize: int, file_url: str | None
+) -> str:
     """Return a remote resource data"""
 
-    if not resource.get("url"):
+    if not resource.url and not file_url:
         return tk._("Resource URL is not provided")
 
     try:
-        resp = requests.get(resource["url"])
+        resp = requests.get(file_url or resource.url)
     except RequestException:
-        log.error("Pygments: Error fetching data for resource: %s", resource["url"])
-        return f"Pygments: Error fetching data for resource by URL {resource['url']}. Please, contact the administrator."
+        log.error("Pygments: Error fetching data for resource: %s", resource.url)
+        return f"Pygments: Error fetching data for resource by URL {resource.url}. Please, contact the administrator."
     else:
         data = resp.text[:maxsize]
 
     return data
+
+
+def get_lexer_for_resource(
+    resource: model.Resource, file_url: str | None = None, data: str = ""
+) -> Any:
+    """Return a lexer for a specified resource"""
+    if not file_url:
+        return get_lexer_for_format(resource.format.lower())()
+
+    if data:
+        if guessed_lexer := pygment_lexers.guess_lexer(data):
+            return guessed_lexer
+    else:
+        if guessed_lexer := pygment_lexers.find_lexer_class_for_filename(file_url):
+            return guessed_lexer()
+
+    return DEFAULT_LEXER()

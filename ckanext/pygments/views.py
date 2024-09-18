@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from flask import Blueprint
-from flask.views import MethodView
 
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
@@ -20,10 +19,11 @@ bp = Blueprint("pygments", __name__, url_prefix="/pygments")
 def highlight(resource_id: str) -> str:
     cache_manager = pygments_cache.RedisCache()
     cache_enabled = pygment_config.is_cache_enabled()
+    resource_view_id = tk.request.args.get("resource_view_id", type=str)
     preview = ""
 
     if cache_enabled:
-        preview = cache_manager.get_data(resource_id)
+        preview = cache_manager.get_data(resource_id, resource_view_id)
         exceed_max_size = len(preview) > pygment_config.get_resource_cache_max_size()
 
         if exceed_max_size:
@@ -39,6 +39,7 @@ def highlight(resource_id: str) -> str:
                 tk.request.args.get(
                     "chunk_size", pygment_config.get_resource_cache_max_size(), type=int
                 ),
+                tk.request.args.get("file_url", type=str),
             )
         except Exception as e:
             log.debug(
@@ -51,12 +52,40 @@ def highlight(resource_id: str) -> str:
             )
         else:
             if cache_enabled and not exceed_max_size:
-                cache_manager.set_data(resource_id, preview)
+                cache_manager.set_data(resource_id, preview, resource_view_id)
+
+    print(preview)
 
     return tk.render(
         "pygments/pygment_preview_body.html",
         {"preview": preview},
     )
+
+
+@bp.route("/clear_cache", methods=["POST"])
+def clear_cache():
+    pygments_cache.RedisCache.drop_cache()
+
+    tk.h.flash_success(tk._("Cache has been cleared"))
+
+    if p.plugin_loaded("admin_panel"):
+        return tk.h.redirect_to("pygments_admin.config")
+    else:
+        return "Cache has been cleared"
+
+
+@bp.route("/clear_cache/<resource_id>", methods=["POST"])
+def clear_resource_cache(resource_id: str):
+    pygments_cache.RedisCache().invalidate(
+        resource_id, tk.request.args.get("resource_view_id", type=str)
+    )
+
+    tk.h.flash_success(tk._("Resource cache has been cleared"))
+
+    if p.plugin_loaded("admin_panel"):
+        return tk.h.redirect_to("pygments_admin.config")
+    else:
+        return "Resource cache has been cleared"
 
 
 if p.plugin_loaded("admin_panel"):
@@ -65,19 +94,6 @@ if p.plugin_loaded("admin_panel"):
 
     pygments_admin = Blueprint("pygments_admin", __name__)
     pygments_admin.before_request(ap_before_request)
-
-    class ConfigClearCacheView(MethodView):
-        def post(self):
-            pygments_cache.RedisCache.drop_cache()
-
-            tk.h.flash_success(tk._("Cache has been cleared"))
-
-            return tk.h.redirect_to("pygments_admin.config")
-
-    pygments_admin.add_url_rule(
-        "/admin-panel/pygments/clear-cache",
-        view_func=ConfigClearCacheView.as_view("clear_cache"),
-    )
 
     pygments_admin.add_url_rule(
         "/admin-panel/pygments/config",

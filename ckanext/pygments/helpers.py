@@ -35,8 +35,8 @@ def pygments_get_cache_size() -> int:
     return pygments_cache.RedisCache().calculate_cache_size()
 
 
-def pygments_get_resource_cache_size(resource_id: str) -> int:
-    return pygments_cache.RedisCache().calculate_resource_cache_size(resource_id)
+def pygments_get_resource_view_cache_size(resource_id: str, resource_view_id: str) -> int:
+    return pygments_cache.RedisCache().calculate_view_cache_size(resource_id, resource_view_id)
 
 
 def pygments_printable_file_size(size_bytes: int) -> str:
