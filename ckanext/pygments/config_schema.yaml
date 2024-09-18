@@ -69,3 +69,10 @@ fields:
     label: Cache TTL
     help_text: Specify the time to live of the cache. Default is 2 hours
     input_type: number
+
+  - field_name: ckanext.pygments.default.view_name
+    label: Default view name
+
+  - field_name: ckanext.pygments.default.description
+    label: Default description
+    form_display: text.html

@@ -39,7 +39,7 @@ class PygmentsPlugin(p.SingletonPlugin):
             "schema": get_preview_schema(),
             "iframed": False,
             "always_available": True,
-            "default_title": tk._("Pygments preview"),
+            "default_title": pygment_config.get_default_view_name(),
         }
 
     def can_view(self, data_dict: DataDict) -> bool:
@@ -52,6 +52,14 @@ class PygmentsPlugin(p.SingletonPlugin):
 
     def form_template(self, context: Context, data_dict: DataDict) -> str:
         return "pygments/pygment_form.html"
+
+    def setup_template_variables(self, context: Context, data_dict: DataDict) -> None:
+        data_dict["resource_view"].setdefault(
+            "title", pygment_config.get_default_view_name()
+        )
+        data_dict["resource_view"].setdefault(
+            "description", pygment_config.get_default_description()
+        )
 
     # IResourceController
 

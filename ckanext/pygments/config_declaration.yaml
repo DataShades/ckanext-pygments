@@ -30,6 +30,8 @@ groups:
         type: bool
         editable: true
 
+      # Cache
+
       - key: ckanext.pygments.cache.enable
         description: Enable cache
         default: false
@@ -46,4 +48,16 @@ groups:
         description: Specify the time to live of the cache
         default: 7200 # 2 hours
         type: int
+        editable: true
+
+      # View defaults
+
+      - key: ckanext.pygments.default.view_name
+        description: Default view name
+        default: Pygments preview
+        editable: true
+
+      - key: ckanext.pygments.default.description
+        description: Default description
+        default: ""
         editable: true
