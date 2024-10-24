@@ -1,4 +1,4 @@
-[![Tests](https://github.com/mutantsan/ckanext-pygments/workflows/Tests/badge.svg?branch=main)](https://github.com/mutantsan/ckanext-pygments/actions)
+[![Tests](https://github.com/DataShades/ckanext-pygments/workflows/Tests/badge.svg?branch=main)](https://github.com/DataShades/ckanext-pygments/actions)
 
 # ckanext-pygments
 
@@ -12,7 +12,7 @@ We use Redis for caching and it uses memory. If you have a lot of resources and 
 It's still debatable if we need cache at all. Big resource processed with pygments will be even bigger. So we can have a lot of memory usage. But if we have a lot of resources and many users access it, we can save a lot of time on processing.
 
 ### Admin configuration page
-If you're using the [ckanext-admin-panel](https://github.com/mutantsan/ckanext-admin-panel) extension, you can configure the pygments settings from the admin panel.
+If you're using the [ckanext-admin-panel](https://github.com/DataShades/ckanext-admin-panel) extension, you can configure the pygments settings from the admin panel.
 
 ![Configuration page](doc/config.png)
 
