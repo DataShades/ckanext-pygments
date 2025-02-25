@@ -4,6 +4,8 @@
 
 This extension provides a preview with syntax highlight for multiple text resources formats.
 
+![Preview](doc/preview.png)
+
 ## Caching
 There is a caching mechanism implemented in this extension. It is disabled by default. To enable it, set `ckanext.pygments.cache.enable` to `True`. You can also set the time to live for the cache in seconds with `ckanext.pygments.cache.ttl`. The default is 7200 seconds (2 hours). You can also set the maximum size of the resource to cache in bytes with `ckanext.pygments.cache.resouce_max_size`. The default is 20MB.
 

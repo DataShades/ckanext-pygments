@@ -54,8 +54,6 @@ def highlight(resource_id: str) -> str:
             if cache_enabled and not exceed_max_size:
                 cache_manager.set_data(resource_id, preview, resource_view_id)
 
-    print(preview)
-
     return tk.render(
         "pygments/pygment_preview_body.html",
         {"preview": preview},
