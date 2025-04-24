@@ -26,7 +26,7 @@ def bytes_to_render() -> int:
 
 
 def include_htmx_asset() -> bool:
-    """Include HTMX library asset. Disable it, if no other library do it."""
+    """Include HTMX library asset. Enable it, if no other library do it."""
     return tk.asbool(tk.config[CONF_ENABLE_HTMX])
 
 
