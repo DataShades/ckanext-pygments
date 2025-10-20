@@ -17,7 +17,7 @@ CONF_DEFAULT_DESCRIPTION = "ckanext.pygments.default.description"
 
 
 def is_format_supported(fmt: str) -> bool:
-    return fmt in tk.config[CONF_SUPPORTED_FORMATS].split(",")
+    return fmt in [fmt.strip().lower() for fmt in tk.config[CONF_SUPPORTED_FORMATS].split(",")]
 
 
 def bytes_to_render() -> int:

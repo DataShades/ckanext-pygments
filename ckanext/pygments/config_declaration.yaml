@@ -4,7 +4,7 @@ groups:
     options:
       - key: ckanext.pygments.supported_formats
         description: Specify a list of supported formats
-        default: sql, html, xhtml, htm, xslt, py, pyw, pyi, jy, sage, sc, rs, rs.in, rst, rest, md, markdown, xml, xsl, rss, xslt, xsd, wsdl, wsf, json, jsonld, yaml, yml, dtd, php, inc, rdf, ttl, js
+        default: sql, html, xhtml, htm, xslt, py, pyw, pyi, jy, sage, sc, rs, rs.in, rst, rest, md, markdown, xml, xsl, rss, xslt, xsd, wsdl, wsf, json, jsonld, yaml, yml, dtd, php, inc, rdf, ttl, js, txt
         editable: true
 
       - key: ckanext.pygments.max_size

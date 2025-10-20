@@ -21,6 +21,7 @@ def highlight(resource_id: str) -> str:
     cache_enabled = pygment_config.is_cache_enabled()
     resource_view_id = tk.request.args.get("resource_view_id", type=str)
     preview = ""
+    exceed_max_size = False
 
     if cache_enabled:
         preview = cache_manager.get_data(resource_id, resource_view_id)
@@ -41,10 +42,9 @@ def highlight(resource_id: str) -> str:
                 ),
                 tk.request.args.get("file_url", type=str),
             )
-        except Exception as e:
-            log.debug(
-                "Pygments: failed to render preview: %s, resource_id: %s",
-                e,
+        except Exception:
+            log.exception(
+                "Pygments: failed to render preview, resource_id: %s",
                 resource_id,
             )
             preview = (
@@ -68,8 +68,8 @@ def clear_cache():
 
     if p.plugin_loaded("admin_panel"):
         return tk.h.redirect_to("pygments_admin.config")
-    else:
-        return "Cache has been cleared"
+
+    return "Cache has been cleared"
 
 
 @bp.route("/clear_cache/<resource_id>", methods=["POST"])
@@ -82,8 +82,8 @@ def clear_resource_cache(resource_id: str):
 
     if p.plugin_loaded("admin_panel"):
         return tk.h.redirect_to("pygments_admin.config")
-    else:
-        return "Resource cache has been cleared"
+
+    return "Resource cache has been cleared"
 
 
 if p.plugin_loaded("admin_panel"):
