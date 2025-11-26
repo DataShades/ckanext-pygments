@@ -9,13 +9,13 @@
                 {% set clear_cache_url = h.url_for('pygments.clear_resource_cache', resource_id=resource.id, resource_view_id=resource_view.id if resource_view.file_url else "") %}
             {% endif %}
 
-            <a
+            <button
                 class="btn btn-default btn-pygment-refresh"
                 hx-post="{{ clear_cache_url }}"
                 hx-swap="none">
                 <i class="fa fa-trash"></i>
                 {{ _("Clear cache") }}
-            </a>
+            </button>
 
             <span><b>{{ _("Memory usage") }}:</b></span>
             <span>{{ _("Total") }}: {{ h.pygments_printable_file_size(h.pygments_get_cache_size()) }}</span>

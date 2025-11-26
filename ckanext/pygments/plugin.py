@@ -4,7 +4,8 @@ from typing import Any
 
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
-import ckan.types as types
+from ckan import types
+from ckan.common import CKANConfig
 from ckan.types import Context, DataDict
 
 import ckanext.pygments.cache as pygment_cache
@@ -25,7 +26,7 @@ class PygmentsPlugin(p.SingletonPlugin):
 
     # IConfigurer
 
-    def update_config(self, config_):
+    def update_config(self, config_: CKANConfig) -> None:
         tk.add_template_directory(config_, "templates")
         tk.add_resource("assets", "pygments")
 
@@ -43,9 +44,7 @@ class PygmentsPlugin(p.SingletonPlugin):
         }
 
     def can_view(self, data_dict: DataDict) -> bool:
-        return pygment_config.is_format_supported(
-            data_dict["resource"].get("format", "").lower()
-        )
+        return pygment_config.is_format_supported(data_dict["resource"].get("format", "").lower())
 
     def view_template(self, context: Context, data_dict: DataDict) -> str:
         return "pygments/pygment_preview.html"
@@ -54,12 +53,9 @@ class PygmentsPlugin(p.SingletonPlugin):
         return "pygments/pygment_form.html"
 
     def setup_template_variables(self, context: Context, data_dict: DataDict) -> None:
-        data_dict["resource_view"].setdefault(
-            "title", pygment_config.get_default_view_name()
-        )
-        data_dict["resource_view"].setdefault(
-            "description", pygment_config.get_default_description()
-        )
+        data_dict["resource_view"].setdefault("title", pygment_config.get_default_view_name())
+        data_dict["resource_view"].setdefault("description", pygment_config.get_default_description())
+        data_dict["resource_view"].setdefault("show_line_numbers", pygment_config.get_default_show_line_numbers())
 
     # IResourceController
 

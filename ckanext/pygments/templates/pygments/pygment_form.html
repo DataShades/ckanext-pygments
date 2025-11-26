@@ -28,3 +28,13 @@
     error=errors.size) %}
         {{ form.info(_('Specifies how many bytes from file we are going to render with ckanext-pygment. Set to `-1` if you want to disable a limit. This can cause the page to load very slowly.', classes=['info-help-tight'])) }}
 {% endcall %}
+
+{% call form.select(
+    'show_line_numbers',
+    id='field-show_line_numbers',
+    label=_('Show Line Numbers'),
+    options=[{"value": "yes", "text": _("Yes")}, {"value": "no", "text": _("No")}],
+    selected='yes' if data.show_line_numbers else 'no',
+    error=errors.show_line_numbers) %}
+        {{ form.info(_('Choose whether to display line numbers in the code preview.', classes=['info-help-tight'])) }}
+{% endcall %}

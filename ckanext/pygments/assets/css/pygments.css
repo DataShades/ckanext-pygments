@@ -8,11 +8,6 @@
     gap: 0.5rem;
 }
 
-
-.pygments-highlight h2 {
-    display: none;
-}
-
 #pygments-spinner {
     gap: 0.25rem;
     display: none;
@@ -28,7 +23,25 @@ body.pygments-request-pending {
 
 }
 
-.pygments_highlight {
+.ckanext-datapreview .pgh {
     max-height: 700px;
     overflow: auto;
+}
+
+.ckanext-datapreview[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.pgh {
+    width: 100%;
+}
+
+.pgh pre {
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+.pgh .linenos a {
+    color: inherit !important;
 }

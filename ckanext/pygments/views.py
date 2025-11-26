@@ -34,22 +34,17 @@ def highlight(resource_id: str) -> str:
         try:
             preview = pygments_utils.pygment_preview(
                 resource_id,
-                tk.request.args.get(
-                    "theme", pygment_config.get_default_theme(), type=str
-                ),
-                tk.request.args.get(
-                    "chunk_size", pygment_config.get_resource_cache_max_size(), type=int
-                ),
+                tk.request.args.get("theme", pygment_config.get_default_theme(), type=str),
+                tk.request.args.get("chunk_size", pygment_config.get_resource_cache_max_size(), type=int),
                 tk.request.args.get("file_url", type=str),
+                tk.asbool(tk.request.args.get("show_line_numbers", "False")),
             )
         except Exception:
             log.exception(
                 "Pygments: failed to render preview, resource_id: %s",
                 resource_id,
             )
-            preview = (
-                "Pygments: Error rendering preview. Please, contact the administrator."
-            )
+            preview = "Pygments: Error rendering preview. Please, contact the administrator."
         else:
             if cache_enabled and not exceed_max_size:
                 cache_manager.set_data(resource_id, preview, resource_view_id)
@@ -74,11 +69,7 @@ def clear_cache():
 
 @bp.route("/clear_cache/<resource_id>", methods=["POST"])
 def clear_resource_cache(resource_id: str):
-    pygments_cache.RedisCache().invalidate(
-        resource_id, tk.request.args.get("resource_view_id", type=str)
-    )
-
-    tk.h.flash_success(tk._("Resource cache has been cleared"))
+    pygments_cache.RedisCache().invalidate(resource_id, tk.request.args.get("resource_view_id", type=str))
 
     if p.plugin_loaded("admin_panel"):
         return tk.h.redirect_to("pygments_admin.config")

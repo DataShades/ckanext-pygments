@@ -3,7 +3,6 @@ pygments-js:
   output: ckanext-pygments/%(version)s-pygments.js
   contents:
     - js/pygment-global.js
-    - js/pygment-line-highlight.js
   extra:
     preload:
       - base/main

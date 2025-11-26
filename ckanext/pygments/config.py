@@ -14,6 +14,7 @@ CONF_CACHE_TTL = "ckanext.pygments.cache.ttl"
 
 CONF_DEFAULT_VIEW_NAME = "ckanext.pygments.default.view_name"
 CONF_DEFAULT_DESCRIPTION = "ckanext.pygments.default.description"
+CONF_DEFAULT_SHOW_LINE_NUMBERS = "ckanext.pygments.default.show_line_numbers"
 
 
 def is_format_supported(fmt: str) -> bool:
@@ -63,3 +64,8 @@ def get_default_view_name() -> str:
 def get_default_description() -> str:
     """Get the default description"""
     return tk.config[CONF_DEFAULT_DESCRIPTION]
+
+
+def get_default_show_line_numbers() -> bool:
+    """Get the default setting for showing line numbers."""
+    return tk.asbool(tk.config[CONF_DEFAULT_SHOW_LINE_NUMBERS])

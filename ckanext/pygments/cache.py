@@ -45,8 +45,8 @@ class RedisCache:
                 cache_ttl,
                 data,
             )
-        except Exception as e:
-            log.exception("Pygments: failed to save data to Redis: %s", e)
+        except Exception:
+            log.exception("Pygments: failed to save data to Redis")
 
     def invalidate(self, resource_id: str, resource_view_id: str | None = None) -> None:
         """Invalidate cache by key"""

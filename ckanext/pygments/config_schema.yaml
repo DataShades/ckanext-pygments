@@ -76,3 +76,13 @@ fields:
   - field_name: ckanext.pygments.default.description
     label: Default description
     form_display: text.html
+
+  - field_name: ckanext.pygments.default.show_line_numbers
+    label: Show Line Numbers by Default
+    preset: select
+    required: true
+    choices:
+      - value: true
+        label: Yes
+      - value: false
+        label: No

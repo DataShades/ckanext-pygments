@@ -44,11 +44,11 @@ class CustomHtmlFormatter(HtmlFormatter):
     def get_linenos_style_defs(self):
         """Alter: prepend styles with self.cssclass"""
         return [
-            ".%s pre { %s }" % (self.cssclass, self._pre_style),
-            ".%s td.linenos .normal { %s }" % (self.cssclass, self._linenos_style),
-            ".%s span.linenos { %s }" % (self.cssclass, self._linenos_style),
-            ".%s td.linenos .special { %s }" % (self.cssclass, self._linenos_special_style),
-            ".%s span.linenos.special { %s }" % (self.cssclass, self._linenos_special_style),
+            f".{self.cssclass} pre {{ {self._pre_style} }}",  # type: ignore
+            f".{self.cssclass} td.linenos .normal {{ {self._linenos_style} }}",  # type: ignore
+            f".{self.cssclass} span.linenos {{ {self._linenos_style} }}",  # type: ignore
+            f".{self.cssclass} td.linenos .special {{ {self._linenos_special_style} }}",  # type: ignore
+            f".{self.cssclass} span.linenos.special {{ {self._linenos_special_style} }}",  # type: ignore
         ]
 
     def get_background_style_defs(self, arg=None):
@@ -61,14 +61,14 @@ class CustomHtmlFormatter(HtmlFormatter):
 
         if arg and not self.nobackground and bg_color is not None:
             text_style = ""
-            if Text in self.ttype2class:
-                text_style = " " + self.class2style[self.ttype2class[Text]][0]
+            if Text in self.ttype2class:  # type: ignore
+                text_style = " " + self.class2style[self.ttype2class[Text]][0]  # type: ignore
             lines.insert(
                 0,
-                "%s{ background: %s;%s }" % (prefix(self.cssclass), bg_color, text_style),
+                f"{prefix(self.cssclass)}{{ background: {bg_color};{text_style} }}",
             )
         if hl_color is not None:
-            lines.insert(0, "%s { background-color: %s }" % (prefix("hll"), hl_color))
+            lines.insert(0, f"{prefix('hll')} {{ background-color: {hl_color} }}")
 
         return lines
 
@@ -89,7 +89,8 @@ def get_lexer_for_format(fmt: str):
             return lexer
 
     if pygment_config.guess_lexer():
-        if lexer := pygment_lexers.find_lexer_class_for_filename(f"file.{fmt}"):
+        lexer = pygment_lexers.find_lexer_class_for_filename(f"file.{fmt}")
+        if lexer:
             return lexer
 
     return DEFAULT_LEXER
@@ -100,6 +101,7 @@ def pygment_preview(
     theme: str,
     chunk_size: int,
     file_url: str | None,
+    show_line_numbers: bool = False,
 ) -> str:
     """Render a preview of a resource using Pygments."""
     resource = model.Resource.get(resource_id)
@@ -122,13 +124,13 @@ def pygment_preview(
         formatter = CustomHtmlFormatter(
             full=False,
             style=theme,
-            linenos="table",
+            linenos="table" if show_line_numbers else False,
             lineanchors="hl-line-number",
-            anchorlinenos=True,
+            anchorlinenos=False,
             linespans="hl-line",
-            cssclass="pygments_highlight",
+            cssclass="pgh ",
         )
-        styles = formatter.get_style_defs('.pygments_highlight')
+        styles = formatter.get_style_defs(".pgh")
         preview = highlight(data, lexer=lexer, formatter=formatter)
     except TypeError:
         return ""
@@ -152,19 +154,45 @@ def get_local_resource_data(resource: model.Resource, maxsize: int) -> str:
 
 
 def get_remote_resource_data(resource: model.Resource, maxsize: int, file_url: str | None) -> str:
-    """Return a remote resource data."""
-    if not resource.url and not file_url:
+    """Return remote resource data.
+
+    If maxsize is -1, fetch full content.
+    Otherwise fetch only first maxsize bytes without downloading the whole file.
+    """
+    url = file_url or resource.url
+    if not url:
         return tk._("Resource URL is not provided")
 
     try:
-        resp = requests.get(file_url or resource.url, stream=True, timeout=10)
+        resp = requests.get(url, stream=True, timeout=10)
+        resp.raise_for_status()
     except RequestException:
-        log.exception("Pygments: Error fetching data for resource: %s", resource.url)
-        return f"Pygments: Error fetching data for resource by URL {resource.url}. Please, contact the administrator."
-    else:
-        data = resp.text[:maxsize]
+        log.exception("Pygments: Error fetching data for resource: %s", url)
+        return f"Pygments: Error fetching data for resource by URL {url}. Please contact the administrator."
 
-    return data
+    if maxsize == -1:
+        try:
+            text = resp.text
+        except UnicodeDecodeError:
+            text = resp.content.decode("utf-8", errors="replace")
+        return text
+
+    data_bytes = b""
+
+    for chunk in resp.iter_content(chunk_size=8192):
+        if not chunk:
+            break
+
+        data_bytes += chunk
+
+        if len(data_bytes) >= maxsize:
+            data_bytes = data_bytes[:maxsize]
+            break
+
+    try:
+        return data_bytes.decode(resp.encoding or "utf-8", errors="replace")
+    except LookupError:
+        return data_bytes.decode("utf-8", errors="replace")
 
 
 def get_lexer_for_resource(resource: model.Resource, file_url: str | None = None, data: str = "") -> Any:
@@ -175,8 +203,7 @@ def get_lexer_for_resource(resource: model.Resource, file_url: str | None = None
     if data:
         if guessed_lexer := pygment_lexers.guess_lexer(data):
             return guessed_lexer
-    else:
-        if guessed_lexer := pygment_lexers.find_lexer_class_for_filename(file_url):
-            return guessed_lexer()
+    elif guessed_lexer := pygment_lexers.find_lexer_class_for_filename(file_url):
+        return guessed_lexer()
 
     return DEFAULT_LEXER()
