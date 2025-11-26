@@ -7,21 +7,10 @@ groups:
         default: sql, html, xhtml, htm, xslt, py, pyw, pyi, jy, sage, sc, rs, rs.in, rst, rest, md, markdown, xml, xsl, rss, xslt, xsd, wsdl, wsf, json, jsonld, yaml, yml, dtd, php, inc, rdf, ttl, js, txt
         editable: true
 
-      - key: ckanext.pygments.max_size
-        type: int
-        description: Specify how many bytes we are going to render from file. Default to 1MB
-        default: 1048576
-        editable: true
-
       - key: ckanext.pygments.include_htmx_asset
         description: Include HTMX asset
         default: true
         type: bool
-        editable: true
-
-      - key: ckanext.pygments.default_theme
-        description: Default theme for preview
-        default: default
         editable: true
 
       - key: ckanext.pygments.guess_lexer
@@ -38,7 +27,7 @@ groups:
         type: bool
         editable: true
 
-      - key: ckanext.pygments.cache.preview_max_size
+      - key: ckanext.pygments.cache.max_size
         description: Specify what is the maximum size of a preview we are going to cache
         default: 20971520 # 20MB
         type: int
@@ -66,4 +55,15 @@ groups:
         description: Show Line Numbers by Default
         default: false
         type: bool
+        editable: true
+
+      - key: ckanext.pygments.default.max_size
+        description: Default maximum file size to render in bytes
+        default: 1048576 # 1MB
+        type: int
+        editable: true
+
+      - key: ckanext.pygments.default.theme
+        description: Default theme for preview
+        default: default
         editable: true

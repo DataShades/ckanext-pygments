@@ -21,38 +21,35 @@ def highlight(resource_id: str) -> str:
     cache_enabled = pygment_config.is_cache_enabled()
     resource_view_id = tk.request.args.get("resource_view_id", type=str)
     preview = ""
-    exceed_max_size = False
 
     if cache_enabled:
         preview = cache_manager.get_data(resource_id, resource_view_id)
-        exceed_max_size = len(preview) > pygment_config.get_resource_cache_max_size()
 
-        if exceed_max_size:
+        if len(preview) > pygment_config.get_resource_cache_max_size():
             cache_manager.invalidate(resource_id)
 
-    if not preview:
-        try:
-            preview = pygments_utils.pygment_preview(
-                resource_id,
-                tk.request.args.get("theme", pygment_config.get_default_theme(), type=str),
-                tk.request.args.get("chunk_size", pygment_config.get_resource_cache_max_size(), type=int),
-                tk.request.args.get("file_url", type=str),
-                tk.asbool(tk.request.args.get("show_line_numbers", "False")),
-            )
-        except Exception:
-            log.exception(
-                "Pygments: failed to render preview, resource_id: %s",
-                resource_id,
-            )
-            preview = "Pygments: Error rendering preview. Please, contact the administrator."
-        else:
-            if cache_enabled and not exceed_max_size:
-                cache_manager.set_data(resource_id, preview, resource_view_id)
+    if preview:
+        return tk.render("pygments/pygment_preview_body.html", {"preview": preview})
 
-    return tk.render(
-        "pygments/pygment_preview_body.html",
-        {"preview": preview},
-    )
+    try:
+        preview = pygments_utils.pygment_preview(
+            resource_id,
+            tk.request.args.get("theme", pygment_config.get_default_theme(), type=str),
+            tk.request.args.get("max_size", pygment_config.get_resource_cache_max_size(), type=int),
+            tk.request.args.get("file_url", type=str),
+            tk.asbool(tk.request.args.get("show_line_numbers", "False")),
+        )
+    except Exception:
+        log.exception(
+            "Pygments: failed to render preview, resource_id: %s",
+            resource_id,
+        )
+        preview = "Pygments: Error rendering preview. Please, contact the administrator."
+    else:
+        if cache_enabled and not len(preview) > pygment_config.get_resource_cache_max_size():
+            cache_manager.set_data(resource_id, preview, resource_view_id)
+
+    return tk.render("pygments/pygment_preview_body.html", {"preview": preview})
 
 
 @bp.route("/clear_cache", methods=["POST"])

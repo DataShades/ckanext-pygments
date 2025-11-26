@@ -15,7 +15,7 @@ def get_preview_schema(
     default,
     one_of,
     int_validator,
-    pygment_max_size,
+    is_positive_integer,
     boolean_validator,
 ) -> types.Schema:
     return {
@@ -25,10 +25,10 @@ def get_preview_schema(
             unicode_safe,
             one_of(get_list_of_themes()),
         ],
-        "size": [
-            default(pygment_config.bytes_to_render()),
+        "max_size": [
+            default(pygment_config.get_default_max_size()),
             int_validator,
-            pygment_max_size,
+            is_positive_integer,
         ],
         "show_line_numbers": [
             default(pygment_config.get_default_show_line_numbers()),

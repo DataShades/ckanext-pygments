@@ -1,8 +1,9 @@
 {% ckan_extends %}
 
 {% block resource_view %}
+    {% if resource_view.view_type == "pygments_view" %}
     <div class="pygments-info">
-        {% if g.userobj.sysadmin and h.pygments_is_cache_enabled() and resource_view.view_type == "pygments_view" %}
+        {% if g.userobj.sysadmin and h.pygments_is_cache_enabled()%}
             {% set clear_cache_url = h.url_for('pygments.clear_resource_cache', resource_id=resource.id) %}
 
             {% if resource_view.file_url %}
@@ -22,6 +23,7 @@
             <span>{{ _("Current") }}: {{ h.pygments_printable_file_size(h.pygments_get_resource_view_cache_size(resource.id, resource_view.id if resource_view.file_url else "")) }}</span>
         {% endif %}
     </div>
+    {% endif %}
 
     {{ super() }}
 {% endblock %}

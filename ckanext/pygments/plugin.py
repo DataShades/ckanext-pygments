@@ -14,7 +14,6 @@ from ckanext.pygments.logic.schema import get_preview_schema
 
 
 @tk.blanket.helpers
-@tk.blanket.validators
 @tk.blanket.config_declarations
 @tk.blanket.blueprints
 @tk.blanket.actions
@@ -56,6 +55,7 @@ class PygmentsPlugin(p.SingletonPlugin):
         data_dict["resource_view"].setdefault("title", pygment_config.get_default_view_name())
         data_dict["resource_view"].setdefault("description", pygment_config.get_default_description())
         data_dict["resource_view"].setdefault("show_line_numbers", pygment_config.get_default_show_line_numbers())
+        data_dict["resource_view"].setdefault("max_size", pygment_config.get_default_max_size())
 
     # IResourceController
 

@@ -8,7 +8,6 @@ import requests
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.styles import STYLE_MAP
-from pygments.token import Text
 from requests.exceptions import RequestException
 
 import ckan.plugins.toolkit as tk
@@ -51,27 +50,6 @@ class CustomHtmlFormatter(HtmlFormatter):
             f".{self.cssclass} span.linenos.special {{ {self._linenos_special_style} }}",  # type: ignore
         ]
 
-    def get_background_style_defs(self, arg=None):
-        """Alter: pass self.cssclass to prefix()."""
-        prefix = self.get_css_prefix(arg)
-        bg_color = self.style.background_color
-        hl_color = self.style.highlight_color
-
-        lines = []
-
-        if arg and not self.nobackground and bg_color is not None:
-            text_style = ""
-            if Text in self.ttype2class:  # type: ignore
-                text_style = " " + self.class2style[self.ttype2class[Text]][0]  # type: ignore
-            lines.insert(
-                0,
-                f"{prefix(self.cssclass)}{{ background: {bg_color};{text_style} }}",
-            )
-        if hl_color is not None:
-            lines.insert(0, f"{prefix('hll')} {{ background-color: {hl_color} }}")
-
-        return lines
-
 
 def get_formats_for_declaration() -> str:
     return " ".join(fmt for formats in LEXERS for fmt in formats)
@@ -99,7 +77,7 @@ def get_lexer_for_format(fmt: str):
 def pygment_preview(
     resource_id: str,
     theme: str,
-    chunk_size: int,
+    max_size: int,
     file_url: str | None,
     show_line_numbers: bool = False,
 ) -> str:
@@ -109,12 +87,12 @@ def pygment_preview(
     if not resource:
         return ""
 
-    maxsize = chunk_size or pygment_config.bytes_to_render()
+    max_size = max_size or pygment_config.get_default_max_size()
 
     if file_url or resource.url_type != "upload":
-        data = get_remote_resource_data(resource, maxsize, file_url)
+        data = get_remote_resource_data(resource, max_size, file_url)
     else:
-        data = get_local_resource_data(resource, maxsize)
+        data = get_local_resource_data(resource, max_size)
 
     lexer = get_lexer_for_resource(resource, file_url, data)
 
@@ -124,7 +102,7 @@ def pygment_preview(
         formatter = CustomHtmlFormatter(
             full=False,
             style=theme,
-            linenos="table" if show_line_numbers else False,
+            linenos="inline" if show_line_numbers else False,
             lineanchors="hl-line-number",
             anchorlinenos=False,
             linespans="hl-line",
@@ -153,11 +131,12 @@ def get_local_resource_data(resource: model.Resource, maxsize: int) -> str:
     return data
 
 
-def get_remote_resource_data(resource: model.Resource, maxsize: int, file_url: str | None) -> str:
-    """Return remote resource data.
+def get_remote_resource_data(resource: model.Resource, max_size: int, file_url: str | None) -> str:
+    """Fetch and return remote resource data.
 
-    If maxsize is -1, fetch full content.
-    Otherwise fetch only first maxsize bytes without downloading the whole file.
+    If file_url is provided, it will be used instead of resource.url.
+
+    Fetching only up to maxsize bytes.
     """
     url = file_url or resource.url
     if not url:
@@ -170,13 +149,6 @@ def get_remote_resource_data(resource: model.Resource, maxsize: int, file_url: s
         log.exception("Pygments: Error fetching data for resource: %s", url)
         return f"Pygments: Error fetching data for resource by URL {url}. Please contact the administrator."
 
-    if maxsize == -1:
-        try:
-            text = resp.text
-        except UnicodeDecodeError:
-            text = resp.content.decode("utf-8", errors="replace")
-        return text
-
     data_bytes = b""
 
     for chunk in resp.iter_content(chunk_size=8192):
@@ -185,8 +157,8 @@ def get_remote_resource_data(resource: model.Resource, maxsize: int, file_url: s
 
         data_bytes += chunk
 
-        if len(data_bytes) >= maxsize:
-            data_bytes = data_bytes[:maxsize]
+        if len(data_bytes) >= max_size:
+            data_bytes = data_bytes[:max_size]
             break
 
     try:

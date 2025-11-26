@@ -2,6 +2,7 @@
 
 {% block before_form %}
     <form method="POST" action="{{ h.url_for('pygments.clear_cache') }}" class="mb-3">
+        {{ h.csrf_input() }}
 
         <div class="pygments-info">
             <button type="submit" name="invalidate-all-cache" value="clear_cache" class="btn btn-primary">

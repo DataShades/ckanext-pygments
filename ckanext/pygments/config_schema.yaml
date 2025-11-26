@@ -15,11 +15,6 @@ fields:
       required: 1
       data-module-load-url: "/api/action/pygments_formats_list"
 
-  - field_name: ckanext.pygments.max_size
-    label: Max Size
-    help_text: Specify how many bytes we are going to render from file. Default to 1MB
-    input_type: number
-
   - field_name: ckanext.pygments.include_htmx_asset
     label: Include HTMX Asset
     help_text: Include HTMX asset
@@ -31,7 +26,7 @@ fields:
       - value: false
         label: No
 
-  - field_name: ckanext.pygments.default_theme
+  - field_name: ckanext.pygments.default.theme
     label: Default Theme
     help_text: Default theme for preview
     preset: select
@@ -60,8 +55,8 @@ fields:
       - value: false
         label: No
 
-  - field_name: ckanext.pygments.cache.preview_max_size
-    label: Preview Max Size
+  - field_name: ckanext.pygments.cache.max_size
+    label: Cache Max Size
     help_text: Specify what is the maximum size of a preview we are going to cache. Default is 20MB
     input_type: number
 
@@ -86,3 +81,8 @@ fields:
         label: Yes
       - value: false
         label: No
+
+  - field_name: ckanext.pygments.default.max_size
+    label: Default Max Size
+    help_text: Specify how many bytes we are going to render from file. Default to 1MB
+    input_type: number

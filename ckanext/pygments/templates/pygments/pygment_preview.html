@@ -2,14 +2,13 @@
     'pygments.highlight',
     resource_id=resource.id,
     theme=resource_view.theme,
-    chunk_size=resource_view.size,
+    max_size=resource_view.max_size,
     file_url=resource_view.file_url,
     resource_view_id=resource_view.id if resource_view.file_url else '',
     show_line_numbers=resource_view.show_line_numbers
 ) %}
 
 <div
-    data-module="pygment-global"
     hx-target="this"
     hx-trigger="load delay:1ms, htmx:afterRequest from:.btn-pygment-refresh"
     hx-get="{{ preview_url }}"
@@ -19,8 +18,6 @@
         {{ _("Preparing your preview...") }}
     </span>
 </div>
-
-{% asset 'pygments/pygments-js' %}
 
 {% if h.pygments_include_htmx_asset() %}
     {% asset "pygments/pygments-js-htmx" %}

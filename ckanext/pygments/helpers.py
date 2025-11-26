@@ -13,7 +13,7 @@ def pygments_get_preview_theme_options() -> list[dict[str, str]]:
 
 
 def pygments_get_default_max_size() -> int:
-    return pygment_config.bytes_to_render()
+    return pygment_config.get_default_max_size()
 
 
 def pygments_include_htmx_asset() -> bool:

@@ -21,12 +21,12 @@
 }}
 
 {% call form.input(
-    'size',
-    id='field-size',
+    'max_size',
+    id='field-max_size',
     label=_('Max size to render'),
-    value=data.size or h.pygments_get_default_max_size(),
-    error=errors.size) %}
-        {{ form.info(_('Specifies how many bytes from file we are going to render with ckanext-pygment. Set to `-1` if you want to disable a limit. This can cause the page to load very slowly.', classes=['info-help-tight'])) }}
+    value=data.max_size or h.pygments_get_default_max_size(),
+    error=errors.max_size) %}
+        {{ form.info(_('Specifies how many bytes from file we are going to render. Set to `-1` if you want to disable a limit. <i class="fa fa-warning"></i> This can cause the page to load very slowly.', classes=['info-help-tight'])) }}
 {% endcall %}
 
 {% call form.select(

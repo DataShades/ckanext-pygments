@@ -1,12 +1,3 @@
-pygments-js:
-  filter: rjsmin
-  output: ckanext-pygments/%(version)s-pygments.js
-  contents:
-    - js/pygment-global.js
-  extra:
-    preload:
-      - base/main
-
 pygments-js-htmx:
   filter: rjsmin
   output: ckanext-pygments/%(version)s-pygments-htmx.js

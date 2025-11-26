@@ -3,27 +3,22 @@ import ckan.plugins.toolkit as tk
 
 CONF_SUPPORTED_FORMATS = "ckanext.pygments.supported_formats"
 
-CONF_MAX_SIZE = "ckanext.pygments.max_size"
 CONF_ENABLE_HTMX = "ckanext.pygments.include_htmx_asset"
-CONF_DEFAULT_THEME = "ckanext.pygments.default_theme"
-CONF_GUESS_LEXER = "ckanext.pygments.guess_lexer"
 
+CONF_GUESS_LEXER = "ckanext.pygments.guess_lexer"
 CONF_ENABLE_CACHE = "ckanext.pygments.cache.enable"
-CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.preview_max_size"
+CONF_RES_CACHE_MAX_SIZE = "ckanext.pygments.cache.max_size"
 CONF_CACHE_TTL = "ckanext.pygments.cache.ttl"
 
 CONF_DEFAULT_VIEW_NAME = "ckanext.pygments.default.view_name"
 CONF_DEFAULT_DESCRIPTION = "ckanext.pygments.default.description"
 CONF_DEFAULT_SHOW_LINE_NUMBERS = "ckanext.pygments.default.show_line_numbers"
+CONF_DEFAULT_MAX_SIZE = "ckanext.pygments.default.max_size"
+CONF_DEFAULT_THEME = "ckanext.pygments.default.theme"
 
 
 def is_format_supported(fmt: str) -> bool:
     return fmt in [fmt.strip().lower() for fmt in tk.config[CONF_SUPPORTED_FORMATS].split(",")]
-
-
-def bytes_to_render() -> int:
-    """Check how many bytes from file we are going to render as preview"""
-    return tk.config[CONF_MAX_SIZE]
 
 
 def include_htmx_asset() -> bool:
@@ -69,3 +64,8 @@ def get_default_description() -> str:
 def get_default_show_line_numbers() -> bool:
     """Get the default setting for showing line numbers."""
     return tk.asbool(tk.config[CONF_DEFAULT_SHOW_LINE_NUMBERS])
+
+
+def get_default_max_size() -> int:
+    """Get the default max size for preview rendering."""
+    return tk.config[CONF_DEFAULT_MAX_SIZE]
