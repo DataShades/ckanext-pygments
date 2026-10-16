@@ -124,6 +124,18 @@ def get_local_resource_data(resource: model.Resource, maxsize: int) -> str:
     upload = uploader.get_resource_uploader(resource.as_dict(True))
     filepath = upload.get_path(resource.id)
 
+    # CKAN 2.12 uploaders keep files in a file-keeper storage, which can be
+    # remote, and ``get_path`` returns the location inside of it
+    storage = getattr(upload, "storage", None)
+    if _is_file_keeper_storage(storage):
+        import file_keeper as fk  # noqa: PLC0415
+
+        try:
+            return _read_from_storage(storage, fk.FileData(fk.Location(filepath)), maxsize)
+        except Exception:  # noqa: BLE001
+            log.exception("Pygments: Error reading data from storage: %s", filepath)
+            return "Pygments: Error reading data from file. Please, contact the administrator."
+
     try:
         with open(filepath) as f:
             data = f.read(maxsize)
@@ -145,14 +157,33 @@ def get_file_resource_data(resource: model.Resource, max_size: int) -> str:
         storage = files.get_storage(file_info["storage"])
         file_data = files.FileData.from_dict(file_info)
 
-        data_bytes = b""
-        for chunk in storage.stream(file_data):
-            data_bytes += chunk[: max_size - len(data_bytes)]
-            if len(data_bytes) >= max_size:
-                break
+        return _read_from_storage(storage, file_data, max_size)
     except Exception:  # noqa: BLE001
         log.exception("Pygments: Error reading data from storage for resource: %s", resource.id)
         return "Pygments: Error reading data from file. Please, contact the administrator."
+
+
+def _is_file_keeper_storage(value: Any) -> bool:
+    """Check whether the value is a file-keeper storage.
+
+    Uploaders of other extensions may have an unrelated ``storage`` attribute,
+    and file-keeper is not installed before CKAN 2.12 without ckanext-files.
+    """
+    try:
+        import file_keeper as fk  # noqa: PLC0415
+    except ImportError:
+        return False
+
+    return isinstance(value, fk.Storage)
+
+
+def _read_from_storage(storage: Any, file_data: Any, max_size: int) -> str:
+    """Read up to ``max_size`` bytes of the file from a file-keeper storage."""
+    data_bytes = b""
+    for chunk in storage.stream(file_data):
+        data_bytes += chunk[: max_size - len(data_bytes)]
+        if len(data_bytes) >= max_size:
+            break
 
     return data_bytes.decode("utf-8", errors="replace")
 
